@@ -1,0 +1,67 @@
+<div>
+  <mat-form-field appearance="fill">
+    <mat-label>Toppings</mat-label>
+    <mat-select [formControl]="toppings" multiple>
+      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>
+
+<div class="form-group">
+  <label for="name">Name</label>
+  <input type="text" class="form-control" id="name"
+         [(ngModel)]="this.Name" name="Name">
+
+  <label for="description">description</label>
+  <input type="text" class="form-control" id="description"
+         [(ngModel)]="this.Description" name="description">
+
+  <label for="deleted">deleted</label>
+  <input type="checkbox" class="form-control" id="deleted"
+         [(ngModel)]="this.Deleted" name="deleted">
+
+  <label for="completed">completed</label>
+  <input type="checkbox" class="form-control" id="completed"
+         [(ngModel)]="this.Completed" name="name">
+
+  <label for="Rank">Rank</label>
+  <input type="number" class="form-control" id="rank"
+         [(ngModel)]="this.Rank" name="rank">
+
+  <label for="categories">categories</label>
+  <input type="text" class="form-control" id="categories"
+         [(ngModel)]="this.Categories" name="categories">
+
+
+</div>
+
+
+<div>
+  <button type="button" class="btn btn-default" (click)="addData()">add data</button>
+  <button type="button" class="btn btn-default" (click)="getData()">show data</button>
+</div>
+
+<table *ngIf="WishlistItems">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th> deleted</th>
+      <th> completed</th>
+      <th> rank</th>
+      <th> categories</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item1 of WishlistItems">
+      <td>{{ item1.id }}</td>
+      <td>{{ item1.name }}</td>
+      <td>{{ item1.deleted }}</td>
+      <td>{{ item1.completed }}</td>
+      <td>{{ item1.rank }}</td>
+      <td>{{ item1.categories }}</td>
+    </tr>
+  </tbody>
+</table>

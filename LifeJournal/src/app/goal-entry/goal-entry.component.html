@@ -1,0 +1,31 @@
+<div class="form-group">
+  <div>
+    <label for="description">description</label>
+    <input type="text" id="description"
+           [(ngModel)]="this.Description" name="description">
+  </div>
+
+  <div>
+    <label for="deleted">entry date</label>
+    <mat-form-field appearance="fill">
+      <mat-label>Entry date</mat-label>
+      <input matInput [matDatepicker]="picker" [formControl]="this.EntryDate">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <label for="description">Number of repetition</label>
+  <input type="number" class="number-picker" id="RepetitionGoal"
+         [(ngModel)]="this.RepetitionGoal" name="RepetitionGoal" style="width: 60px;">
+
+  <app-time-span-picker (Time)="getTime($event)" [FieldName]="'Time of entry'"></app-time-span-picker>
+
+  <div>
+    <button type="button" class="btn btn-default" (click)="addData()">add data</button>
+  </div>
+
+
+</div>
+
+
+

@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+
+.number-picker {
+  width: 35px;
+}
+
+.number-picker-big {
+  width: 55px;
+}
+
+
+.md-datepicker-input-container {
+  width: 120px;
+  height: 30px;
+  line-height: 10px;
+}
+
+.form-group {
+  font-size: 12px
+}

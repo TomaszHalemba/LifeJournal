@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@ng-bootstrap/ng-bootstrap": "^10.0.0",
+    "ag-charts-angular": "^5.3.0",
+    "ag-charts-community": "^5.3.0",
+    "angular-mat-datepicker": "^0.0.2",
+    "apexcharts": "^3.35.3",
+    "chart.js": "^3.8.0",
+    "ng-multiselect-dropdown": "^0.3.7",
+    "ng2-charts": "^3.0.11"
+  }
+}

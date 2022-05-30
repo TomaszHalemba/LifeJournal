@@ -1,0 +1,125 @@
+<!--<label for="description">Account sent</label>
+<input type="number" class="number-picker-big" id="AccountSent"
+       [(ngModel)]="this.AccountSent" name="AccountSent">-->
+
+
+<div class="form-group">
+  <mat-form-field appearance="fill">
+    <mat-label>Entry date</mat-label>
+    <input matInput [matDatepicker]="picker" [formControl]="this.EntryDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <br />
+  <label>Ignore sent account</label>
+  <input type="checkbox" id="ignoreSentAccount"
+         [(ngModel)]="this.ignoreSentAccount" name="ignoreSentAccount">
+  <mat-form-field appearance="fill">
+    <mat-label>Account sent</mat-label>
+    <mat-select [formControl]="accountSentController" (selectionChange)="accountSentListChange()">
+      <mat-option *ngFor="let acc of accounts" [value]="acc">{{acc.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>currency sent</mat-label>
+    <mat-select [formControl]="currencySentController" (selectionChange)="currencySentListChange()">
+      <mat-option *ngFor="let cur of currencies" [value]="cur">{{cur.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <label>currency sent</label>
+  <input type="number" class="number-picker-big" id="currencySent"
+         [(ngModel)]="this.currencySent" name="currencySent">
+  <label>fee currency sent</label>
+  <input type="number" class="number-picker-big" id="feeCurrencySent"
+         [(ngModel)]="this.feeCurrencySent" name="feeCurrencySent">
+  <label>rate</label>
+  <input type="number" class="number-picker-big" id="rate"
+         [(ngModel)]="this.rate" name="rate">
+
+
+  <mat-radio-group aria-label="Select an option" [(ngModel)]="feeSentRadio">
+    <mat-radio-button [value]=1>fee %</mat-radio-button>
+    <mat-radio-button [value]=2>fee value</mat-radio-button>
+  </mat-radio-group>
+
+  <br />
+  <label>Ignore recived account</label>
+  <input type="checkbox" id="ignoreRecivedAccount"
+         [(ngModel)]="this.ignoreRecivedAccount" name="ignoreRecivedAccount">
+  <mat-form-field appearance="fill">
+    <mat-label>Account recived</mat-label>
+    <mat-select [formControl]="accountRecivedController" (selectionChange)="accountRecivedListChange()">
+      <mat-option *ngFor="let acc of accounts" [value]="acc">{{acc.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>currency recived</mat-label>
+    <mat-select [formControl]="currencyRecivedController" (selectionChange)="currencyRecivedListChange()">
+      <mat-option *ngFor="let cur of currencies" [value]="cur">{{cur.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <label>currency recived</label>
+  <input type="number" class="number-picker-big" id="currencyRecived"
+         [(ngModel)]="this.currencyRecived" name="currencyRecived">
+  <label>fee currency recived</label>
+  <input type="number" class="number-picker-big" id="feeCurrencyRecived"
+         [(ngModel)]="this.feeCurrencyRecived" name="feeCurrencyRecived">
+
+  <mat-radio-group aria-label="Select an option" [(ngModel)]="feeRecivedRadio">
+    <mat-radio-button [value]=1>fee %</mat-radio-button>
+    <mat-radio-button [value]=2>fee value</mat-radio-button>
+  </mat-radio-group>
+
+  <button type="button" class="btn btn-default" (click)="calclulateCurrencyRecived()">calculate by rate</button>
+  <br />
+  {{this.finalValue}}
+  <button type="button" class="btn btn-default" (click)="addData()">add data</button>
+
+</div>
+
+
+<!--<div>
+  <label for="deleted">entry date</label>
+  <mat-form-field appearance="fill">
+    <mat-label>Start date</mat-label>
+    <input matInput [matDatepicker]="picker" [formControl]="this.EntryDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</div>-->
+
+
+
+<!--<mat-dialog-content [formGroup]="form">
+
+  <mat-form-field>
+
+    <input matInput min="0" max="100" required placeholder="Payment Reason" formControlName="reason" value="{{reason}}">
+
+  </mat-form-field>
+  <mat-radio-group formControlName="status">
+    <mat-radio-button value="Approve">Approve</mat-radio-button>
+    <mat-radio-button value="Reject">Reject</mat-radio-button>
+  </mat-radio-group>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+
+  <button class="mat-raised-button" (click)="save()">
+    Ok
+  </button>
+
+
+
+  <button class="mat-raised-button"
+          (click)="close()">
+    Close
+  </button>
+
+</mat-dialog-actions>-->

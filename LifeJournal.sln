@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "LifeJournalWeb", "LifeJournal\LifeJournalWeb.esproj", "{18ED09A6-0EB6-40DC-AA32-A3EC9904F4AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifeJournalCore", "LifeJournalCore\LifeJournalCore.csproj", "{AC8F25EB-4B8F-4EF1-8933-A11E5BB67046}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18ED09A6-0EB6-40DC-AA32-A3EC9904F4AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18ED09A6-0EB6-40DC-AA32-A3EC9904F4AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18ED09A6-0EB6-40DC-AA32-A3EC9904F4AB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{18ED09A6-0EB6-40DC-AA32-A3EC9904F4AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18ED09A6-0EB6-40DC-AA32-A3EC9904F4AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18ED09A6-0EB6-40DC-AA32-A3EC9904F4AB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{AC8F25EB-4B8F-4EF1-8933-A11E5BB67046}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC8F25EB-4B8F-4EF1-8933-A11E5BB67046}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC8F25EB-4B8F-4EF1-8933-A11E5BB67046}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC8F25EB-4B8F-4EF1-8933-A11E5BB67046}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B6A529F0-CA3C-4968-BCB7-2A158FEDF95E}
+	EndGlobalSection
+EndGlobal

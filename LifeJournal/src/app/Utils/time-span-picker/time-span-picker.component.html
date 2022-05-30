@@ -1,0 +1,5 @@
+
+<label>{{this?.FieldName}} </label>
+<input type="number" min="0" step="1" [(ngModel)]="this.Hours" (change) ="this.updateTime()"  style="width: 45px;"/>:
+<input type="number" min="0" max="59" step="1" [(ngModel)]="this.Minutes" (change) ="this.updateTime()"  style="width: 35px;"/>:
+<input type="number" min="0" max="59" step="1" [(ngModel)]="this.Seconds" (change) ="this.updateTime()" style="width: 35px;"/>
