@@ -33,112 +33,59 @@ export class GoalDetailsComponent {
   public goalPercentageColor: string;
   public timePercentage?: number;
   public timePercentageColor: string;
+  public repetitionPercentageColor: string;
   public avgTime?: number;
   public avgTimeColor: string;
   public avgTimeNeeded?: number;
+  public avgRepetitionNeeded?: number;
   public daySpan?: number;
   public goalPercentageToDate?: number;
   public color?: string;
   public PastDays?: number;
   public GoalEntries?: GoalEntry[];
+  public timeGoalToDate?: number;
+  public repetitionGoalToDate?: number;
+  public avgRepetitionsDone?: number;
+  public daysToReachRepetitionGoal?: number;
+  public daysToReachTimeGoal?: number;
+  public DateToReachRepetitionGoal: Date;
+  public DateToReachTimeGoal: Date;
 
   constructor(http: HttpClient) {
     this.colorTable = ['#ffffff', '#ffb3b3', '#b3e6b3'];
     this.goalPercentageColor = this.colorTable[0];
     this.timePercentageColor = this.colorTable[0];
     this.avgTimeColor = this.colorTable[0];
+    this.repetitionPercentageColor = this.colorTable[0];
     this.http = http;
     this.getData();
+    this.PastDays = 30;
+    this.DateToReachRepetitionGoal = new Date();
+    this.DateToReachTimeGoal = new Date();
 
 
-
-    this.options = {
-      autoSize: true,
-      //data: getData1(),
-      theme: {
-        overrides: {
-          line: {
-            series: {
-              highlightStyle: {
-                series: {
-                  strokeWidth: 3,
-                  dimOpacity: 0.2,
-                },
-              },
-            },
-          },
-        },
-      },
-      title: {
-        text: 'Road fuel prices (2019)',
-        fontSize: 18,
-      },
-      subtitle: {
-        text: 'Source: Department for Business, Energy & Industrial Strategy',
-      },
-      series: [
-        {
-          type: 'line',
-          xKey: 'date',
-          yKey: 'petrol',
-          stroke: '#01c185',
-          marker: {
-            stroke: '#01c185',
-            fill: '#01c185',
-          },
-        },
-        //{
-        //  type: 'line',
-        //  xKey: 'date',
-        //  yKey: 'diesel',
-        //  stroke: '#000000',
-        //  marker: {
-        //    stroke: '#000000',
-        //    fill: '#000000',
-        //  },
-        //},
-      ],
-      axes: [
-        {
-          position: 'bottom',
-          //type: 'number',
-          type: 'time',
-          tick: {
-            count: agCharts.time.month.every(2),
-          },
-          title: {
-            text: 'Date',
-          },
-        },
-        {
-          position: 'left',
-          type: 'number',
-          title: {
-            text: 'Price in pence',
-          },
-        },
-      ],
-    };
+    this.options = this.createOptions('test', getData1());
   }
-
-    //var tmp = new GoalEntryRequest();
-    //tmp.AmmountToTake = 5;
-    //tmp.GoalId = this.goalId;
 
 
   getData() {
     if (this.goalId) {
-      this.http.get<GoalDetails>('/GoalDetailsService', { params: { id: this.goalId! } } ).subscribe(result => {
+      this.http.get<GoalDetails>('/GoalDetailsService', { params: { id: this.goalId! } }).subscribe(result => {
         this.model = result;
         if (this.model.repetitionGoal && this.model.repetitionGoalDone) {
           this.goalPercentage = this.model.repetitionGoalDone / this.model.repetitionGoal * 100
         }
-        if (this.model.timeReached && this.model.time) {
-          this.timePercentage = (this.model.timeReached / this.model.time * 100);
-        }
         if (this.model.repetitionGoalDone && this.model.timeReached) {
           this.avgTime = this.model.timeReached / this.model.repetitionGoalDone;
         }
+        if (this.model.timeReached && this.model.time) {
+          this.timePercentage = (this.model.timeReached / this.model.time * 100);
+          if (this.avgTime) {
+            this.daysToReachTimeGoal = (this.model.time - this.model.timeReached) / this.avgTime;
+            this.DateToReachTimeGoal.setDate(this.DateToReachTimeGoal.getDate() + this.daysToReachTimeGoal);
+          }
+        }
+
         if (this.model.repetitionGoal && this.model.time) {
           this.avgTimeNeeded = this.model.time / this.model.repetitionGoal;
         }
@@ -146,18 +93,42 @@ export class GoalDetailsComponent {
           this.avgTimeColor = this.avgTime > this.avgTimeNeeded ? this.colorTable[2] : this.colorTable[1];
         }
 
+
         if (this.model.startDate && this.model.endDate) {
           this.daySpan = calculateDateDiffDays(new Date(this.model.endDate), new Date(this.model.startDate));
+
+
+
           if (this.model.repetitionGoal && this.model.repetitionGoalDone) {
-            //var percentagePerDay = this.model.repetitionGoal / this.daySpan;
             var daysFromStartToCurrentDate = calculateDateDiffDays(new Date(this.model.startDate), new Date());
+
             this.goalPercentageToDate = daysFromStartToCurrentDate / this.daySpan * 100;
+            this.avgRepetitionNeeded = this.model.repetitionGoal / this.daySpan;
+            this.avgRepetitionsDone = this.model.repetitionGoalDone / daysFromStartToCurrentDate;
+
+            if (this.model.time) {
+              this.timeGoalToDate = this.goalPercentageToDate / 100 * this.model.time;
+            }
+            if (this.model.repetitionGoal) {
+              this.repetitionGoalToDate = this.goalPercentageToDate / 100 * this.model.repetitionGoal;
+            }
+
             if (this.goalPercentage) {
               this.goalPercentageColor = this.goalPercentage > this.goalPercentageToDate ? this.colorTable[2] : this.colorTable[1];
             }
             if (this.timePercentage) {
               this.timePercentageColor = this.timePercentage > this.goalPercentageToDate ? this.colorTable[2] : this.colorTable[1];
             }
+            this.daysToReachRepetitionGoal = (this.model.repetitionGoal - this.model.repetitionGoalDone) / this.avgRepetitionsDone;
+
+            this.DateToReachRepetitionGoal.setDate(this.DateToReachRepetitionGoal.getDate() + this.daysToReachRepetitionGoal);
+
+            this.repetitionPercentageColor = this.avgRepetitionsDone > this.avgRepetitionNeeded ? this.colorTable[2] : this.colorTable[1];
+            
+          }
+
+          if (this.model.time && this.model.timeReached) {
+
           }
 
         }
@@ -167,81 +138,12 @@ export class GoalDetailsComponent {
       this.http.get<GoalEntry[]>('/GoalEntryService', { params: { GoalId: this.goalId!, AmmountToTake: this.PastDays ? this.PastDays : 30 } }).subscribe(data => {
         this.GoalEntries = data;
 
-        //var newData: any[];
-        //data.forEach(x => newData.push({ date: x.entryDate, petrol: getTimeSpanFromLong(x.time) }));
-       
         let newData = data.map((x) => {
-          return { date: new Date(x.entryDate!), petrol: getTimeFromLong(x.time) }
+          return { date: new Date(x.entryDate!), trainingTime: getTimeFromLong(x.time) }
         });
 
-        this.options = {
-          autoSize: true,
-          data: newData,
-          theme: {
-            overrides: {
-              line: {
-                series: {
-                  highlightStyle: {
-                    series: {
-                      strokeWidth: 3,
-                      dimOpacity: 0.2,
-                    },
-                  },
-                },
-              },
-            },
-          },
-          title: {
-            text: 'Road fuel prices (2019)',
-            fontSize: 18,
-          },
-          subtitle: {
-            text: 'Source: Department for Business, Energy & Industrial Strategy',
-          },
-          series: [
-            {
-              type: 'line',
-              xKey: 'date',
-              yKey: 'petrol',
-              stroke: '#01c185',
-              marker: {
-                stroke: '#01c185',
-                fill: '#01c185',
-              },
-            },
-            //{
-            //  type: 'line',
-            //  xKey: 'date',
-            //  yKey: 'diesel',
-            //  stroke: '#000000',
-            //  marker: {
-            //    stroke: '#000000',
-            //    fill: '#000000',
-            //  },
-            //},
-          ],
-          axes: [
-            {
-              position: 'bottom',
-              //type: 'number',
-              type: 'time',
-              tick: {
-                count: agCharts.time.day.every(1),
-              },
-              title: {
-                text: 'Date',
-              },
-            },
-            {
-              position: 'left',
-              type: 'number',
-              title: {
-                text: 'Price in pence',
-              },
-            },
-          ],
-        };
-      })
+        this.options = this.createOptions('training time per day', newData);
+      });
     }
   }
 
@@ -253,6 +155,68 @@ export class GoalDetailsComponent {
     return getTimeFromLong(time);
   }
 
+
+  createOptions(title: string, chartData: any[], chartSubtitle? : string): AgChartOptions {
+    var chartOptions: AgChartOptions;
+    chartOptions = 
+    {
+      autoSize: true,
+        data: chartData,
+        theme: {
+        overrides: {
+          line: {
+            series: {
+              highlightStyle: {
+                series: {
+                  strokeWidth: 3,
+                    dimOpacity: 0.2,
+                },
+              },
+            },
+          },
+        },
+      },
+      title: {
+        text: title,
+          fontSize: 18,
+      },
+      subtitle: {
+        text: chartSubtitle,
+      },
+      series: [
+        {
+          type: 'line',
+          xKey: 'date',
+          yKey: 'trainingTime',
+          stroke: '#01c185',
+          marker: {
+            stroke: '#01c185',
+            fill: '#01c185',
+          },
+        },
+      ],
+        axes: [
+          {
+            position: 'bottom',
+            type: 'time',
+            tick: {
+              count: agCharts.time.day.every(7),
+            },
+            title: {
+              text: 'Date',
+            },
+          },
+          {
+            position: 'left',
+            type: 'number',
+            title: {
+              text: 'Time',
+            },
+          },
+        ],
+    };
+    return chartOptions;
+  }
   
 
 

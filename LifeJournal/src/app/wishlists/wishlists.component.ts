@@ -17,7 +17,6 @@ export class WishlistsComponent {
   public Categories?: string;
   public Description?: string;
   public toppings = new FormControl();
-  /*  public toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];*/
   public toppingList: CategoryTmp[] = [{ id: 1, name: 'padoru' }, { id: 2, name: 'nintendo' }, { id: 3, name: 'zelda' }];
 
   constructor(http: HttpClient) {

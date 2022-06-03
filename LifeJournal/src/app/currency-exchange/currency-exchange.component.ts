@@ -36,7 +36,6 @@ export class CurrencyExchangeComponent {
   public feeRecivedRadio: number;
 
 
-  /*  public toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];*/
   public accounts?: Account[] = [
     {
       id: 1,

@@ -21,7 +21,6 @@ export class GoalsComponent {
   public goalId?: number;
 
   public GoalListController = new FormControl();
-  /*  public toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];*/
   public GoalList?: GoalList[];
 
   constructor(http: HttpClient) {

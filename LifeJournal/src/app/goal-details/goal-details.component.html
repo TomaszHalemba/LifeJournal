@@ -4,7 +4,7 @@
 <input type="number" class="number-picker" id="getDaysId"
        [(ngModel)]="this.PastDays" name="PastDays" style="width: 60px;">
 <label for="DaysLbl"> days</label>
-<div ng-if="this.model">
+<div *ngIf="this.model">
   <div>
     <p> Date span of goal: {{this.model?.startDate | date:'yyyy-MM-dd' }} - {{this.model?.endDate | date:'yyyy-MM-dd'}}</p>
   </div>
@@ -16,16 +16,21 @@
       <th>goal %</th>
       <th>avg</th>
       <th>avg needed</th>
-      <th>% needed to be done to current date</th>
+      <th>% needed to be done<br /> to current date</th>
+      <th># needed to be done<br /> to current date</th>
+      <th>days to 100%</th>
     </tr>
     <tr>
       <td>Repetitions</td>
       <td>{{this.model?.repetitionGoal}}</td>
       <td>{{this.model?.repetitionGoalDone}}</td>
       <td [ngStyle]="{'background-color': this.goalPercentageColor}">{{this?.goalPercentage | number}}%</td>
-      <td>TBA</td>
-      <td>TBA</td>
+      <td [ngStyle]="{'background-color': this.repetitionPercentageColor}" >{{this.avgRepetitionsDone | number}}</td>
+      <td>{{this.avgRepetitionNeeded | number}}</td>
       <td rowspan="2">{{this?.goalPercentageToDate | number}}%</td>
+
+      <td>{{this.repetitionGoalToDate | number : '1.0-0'}}</td>
+      <td>{{this.daysToReachRepetitionGoal | number : '1.0-0'}} ({{this.DateToReachRepetitionGoal | date:'dd-MM-yyyy'}})</td>
 
     </tr>
     <tr>
@@ -35,6 +40,8 @@
       <td [ngStyle]="{'background-color': this.timePercentageColor}">{{this?.timePercentage | number}}%</td>
       <td [ngStyle]="{'background-color': this.avgTimeColor}">{{this.getTimeSpanFromLong(this?.avgTime)}}</td>
       <td>{{this.getTimeSpanFromLong(this?.avgTimeNeeded)}}</td>
+      <td>{{this.getTimeSpanFromLong(this?.timeGoalToDate)}}</td>
+      <td>{{this.daysToReachTimeGoal | number : '1.0-0'}} ({{this.DateToReachTimeGoal | date:'dd-MM-yyyy'}})</td>
     </tr>
   </table>
   <br />
@@ -60,38 +67,9 @@
       </td>
     </tr>
   </table>
-  <!--<table>
-  <template let-group ngFor [ngForOf]="GoalEntries">
-    <tr *ngFor="let row of group.items">{{row}}</tr>
-  </template>
-  </table>-->
 
   <div>
     <ag-charts-angular [options]="options">
     </ag-charts-angular>
   </div>
 </div>
-
-
-<!--Description?: string | undefined;
-EntryDate?: Date;
-RepetitionGoal?: number;
-Time?: number;-->
-<!--public goalPercentage?: number;
-public timePercentage?: number;
-public avgTime?: number;
-public avgTimeNeeded?: number;-->
-<!--export class GoalDetails {
-  Id?: number;
-  Name?: string;
-  Description?: string;
-  StartDate?: Date;
-  EndDate?: Date;
-  NumberOfEntries?: number;
-  RepetitionGoal?: number;
-  RepetitionGoalDone?: number;
-  Time?: number;
-  TimeReached?: number;
-  tmp?: any;
-
-}-->
