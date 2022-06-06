@@ -1,0 +1,48 @@
+<div>
+  <label for="Name">Reminder name</label>
+  <input type="text" id="reminderName"
+         [(ngModel)]="this.reminderName" name="reminderName">
+</div>
+
+<div>
+  <label for="deleted">entry date</label>
+  <mat-form-field appearance="fill">
+    <mat-label>Entry date</mat-label>
+    <input matInput [matDatepicker]="picker" [formControl]="this.entryDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</div>
+
+<button class="btn btn-default" (click)="addData()">Add reminder entry</button>
+
+<div *ngIf="!this.entryList">
+  <h3>
+    Loading Data
+  </h3>
+</div>
+<div *ngIf="this.entryList">
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Date of reminder</th>
+      <th>Is it done?</th>
+      <th>Change<br />Status</th>
+    </tr>
+    <tr *ngFor="let column of entryList">
+
+      <td>
+        {{column.name}}
+      </td>
+      <td>
+        {{column.reminderDate | date:'yyyy-MM-dd HH:mm'}}
+      </td>
+      <td>
+        {{column.isDone ? 'Yes' : 'No'}}
+      </td>
+      <td>
+        <button class="btn btn-default" (click)="changeStatus(column.id)">Change</button>
+      </td>
+    </tr>
+  </table>
+</div>

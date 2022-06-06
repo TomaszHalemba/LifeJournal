@@ -7,6 +7,7 @@ const PROXY_CONFIG = [
       "/GoalEntryService",
       "/GoalDetailsService",
       "/CurrencyExchangeService",
+      "/ReminderEntryGetService",
     ],
     target: "https://localhost:5001",
     secure: false

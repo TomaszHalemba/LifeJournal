@@ -17,6 +17,7 @@ import { GoalEntryComponent } from './goal-entry/goal-entry.component';
 import { GoalDetailsComponent } from './goal-details/goal-details.component';
 import { TimeSpanPickerComponent } from './Utils/time-span-picker/time-span-picker.component';
 import { CurrencyExchangeComponent } from './currency-exchange/currency-exchange.component';
+import { ReminderEntryListComponent } from './reminder-entry-list/reminder-entry-list.component';
 
 
 
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'app-wishlists', component: WishlistsComponent },
   { path: 'app-goals', component: GoalsComponent },
   { path: 'app-currency-exchange', component: CurrencyExchangeComponent },
+  { path: 'reminder-entry-list', component: ReminderEntryListComponent },
 ];
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ const routes: Routes = [
     GoalEntryComponent,
     GoalDetailsComponent,
     TimeSpanPickerComponent,
-    CurrencyExchangeComponent
+    CurrencyExchangeComponent,
+    ReminderEntryListComponent
 
   ],
   imports: [
