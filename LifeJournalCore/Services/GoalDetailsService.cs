@@ -41,8 +41,8 @@ namespace LifeJournalCore.Controllers
             goalDetailsDTO.EndDate = goal.EndDate;
             goalDetailsDTO.RepetitionGoal = goal.RepetitionGoal;
             goalDetailsDTO.Description = goal.Description;
-            goalDetailsDTO.TimeReached = (long?)goal.Entries.Sum(x => x.TimeOfEntry?.TotalSeconds ?? 0);
-            goalDetailsDTO.Time = (long?)(goal.TimeSpanGoal?.TotalSeconds);
+            goalDetailsDTO.TimeGoalDone = (long?)goal.Entries.Sum(x => x.TimeOfEntry?.TotalSeconds ?? 0);
+            goalDetailsDTO.TimeGoal = (long?)(goal.TimeSpanGoal?.TotalSeconds);
             goalDetailsDTO.RepetitionGoalDone = (int?)goal.Entries.Sum(x => x.NumberOfRepetition ?? 0);
             return goalDetailsDTO;
         }

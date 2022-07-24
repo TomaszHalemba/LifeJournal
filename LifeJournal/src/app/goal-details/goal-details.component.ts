@@ -27,17 +27,50 @@ export class GoalDetailsComponent {
 //  green = '#339933'
 
 //}
+
+
+
+//  < th > goal % </th>
+//  < th > avg < /th>
+//  < th > avg needed < /th>
+//    < th >% needed to be done < br /> to current date < /th>
+//      < th ># needed to be done < br /> to current date < /th>
+//        < th > days to 100 % </th>
+//          < /tr>
+//          < tr >
+//          <td>Repetitions < /td>
+//                < td[ngStyle]="{'background-color': this.repetitionPercentageColor}" > {{ this.avgRepetitionsDone | number }}</td>
+//                  < td > {{ this.avgRepetitionNeeded | number }}</td>
+//                    < td rowspan = "2" > {{ this?.goalPercentageToDate | number }}% </td>
+
+//                      < td > {{ this.repetitionGoalToDate | number : '1.0-0' }}</td>
+//                        < td > {{ this.daysToReachRepetitionGoal | number : '1.0-0' }} ({{ this.DateToReachRepetitionGoal | date: 'dd-MM-yyyy' }})</td>
+
+//                          < /tr>
+//                          < tr >
+//                          <td>Time < /td>
+//                                < td[ngStyle]="{'background-color': this.avgTimeColor}" > {{ this.getTimeSpanFromLong(this?.avgTime) }}</td>
+//                                  < td > {{ this.getTimeSpanFromLong(this?.avgTimeNeeded) }}</td>
+//                                    < td > {{ this.getTimeSpanFromLong(this?.timeGoalToDate) }}</td>
+//                                      < td > {{ this.daysToReachTimeGoal | number : '1.0-0' }} ({{ this.DateToReachTimeGoal | date: 'dd-MM-yyyy' }})</td>
+//                                        < /tr>
   public colorTable: string[];
 
   public goalPercentage?: number;
-  public goalPercentageColor: string;
   public timePercentage?: number;
   public timePercentageColor: string;
-  public repetitionPercentageColor: string;
-  public avgTime?: number;
-  public avgTimeColor: string;
+  public goalPercentageColor: string;
+
+  public avgGoalPercentage?: number;
+  public avgTimePercentage?: number
+  public avgGoalPercentageColor: string;
+  public avgTimePercentageColor: string;
+
+
   public avgTimeNeeded?: number;
   public avgRepetitionNeeded?: number;
+
+
   public daySpan?: number;
   public goalPercentageToDate?: number;
   public color?: string;
@@ -45,7 +78,7 @@ export class GoalDetailsComponent {
   public GoalEntries?: GoalEntry[];
   public timeGoalToDate?: number;
   public repetitionGoalToDate?: number;
-  public avgRepetitionsDone?: number;
+
   public daysToReachRepetitionGoal?: number;
   public daysToReachTimeGoal?: number;
   public DateToReachRepetitionGoal: Date;
@@ -55,8 +88,8 @@ export class GoalDetailsComponent {
     this.colorTable = ['#ffffff', '#ffb3b3', '#b3e6b3'];
     this.goalPercentageColor = this.colorTable[0];
     this.timePercentageColor = this.colorTable[0];
-    this.avgTimeColor = this.colorTable[0];
-    this.repetitionPercentageColor = this.colorTable[0];
+    this.avgTimePercentageColor = this.colorTable[0];
+    this.avgGoalPercentageColor = this.colorTable[0];
     this.http = http;
     this.getData();
     this.PastDays = 30;
@@ -75,22 +108,22 @@ export class GoalDetailsComponent {
         if (this.model.repetitionGoal && this.model.repetitionGoalDone) {
           this.goalPercentage = this.model.repetitionGoalDone / this.model.repetitionGoal * 100
         }
-        if (this.model.repetitionGoalDone && this.model.timeReached) {
-          this.avgTime = this.model.timeReached / this.model.repetitionGoalDone;
+        if (this.model.repetitionGoalDone && this.model.timeGoalDone) {
+          this.avgTimePercentage = this.model.timeGoalDone / this.model.repetitionGoalDone;
         }
-        if (this.model.timeReached && this.model.time) {
-          this.timePercentage = (this.model.timeReached / this.model.time * 100);
-          if (this.avgTime) {
-            this.daysToReachTimeGoal = (this.model.time - this.model.timeReached) / this.avgTime;
+        if (this.model.timeGoalDone && this.model.timeGoal) {
+          this.timePercentage = (this.model.timeGoalDone / this.model.timeGoal * 100);
+          if (this.avgTimePercentage) {
+            this.daysToReachTimeGoal = (this.model.timeGoal - this.model.timeGoalDone) / this.avgTimePercentage;
             this.DateToReachTimeGoal.setDate(this.DateToReachTimeGoal.getDate() + this.daysToReachTimeGoal);
           }
         }
 
-        if (this.model.repetitionGoal && this.model.time) {
-          this.avgTimeNeeded = this.model.time / this.model.repetitionGoal;
+        if (this.model.repetitionGoal && this.model.timeGoal) {
+          this.avgTimeNeeded = this.model.timeGoal / this.model.repetitionGoal;
         }
-        if (this.avgTime && this.avgTimeNeeded) {
-          this.avgTimeColor = this.avgTime > this.avgTimeNeeded ? this.colorTable[2] : this.colorTable[1];
+        if (this.avgTimePercentage && this.avgTimeNeeded) {
+          this.avgTimePercentageColor = this.avgTimePercentage > this.avgTimeNeeded ? this.colorTable[2] : this.colorTable[1];
         }
 
 
@@ -104,10 +137,10 @@ export class GoalDetailsComponent {
 
             this.goalPercentageToDate = daysFromStartToCurrentDate / this.daySpan * 100;
             this.avgRepetitionNeeded = this.model.repetitionGoal / this.daySpan;
-            this.avgRepetitionsDone = this.model.repetitionGoalDone / daysFromStartToCurrentDate;
+            this.avgGoalPercentage = this.model.repetitionGoalDone / daysFromStartToCurrentDate;
 
-            if (this.model.time) {
-              this.timeGoalToDate = this.goalPercentageToDate / 100 * this.model.time;
+            if (this.model.timeGoal) {
+              this.timeGoalToDate = this.goalPercentageToDate / 100 * this.model.timeGoal;
             }
             if (this.model.repetitionGoal) {
               this.repetitionGoalToDate = this.goalPercentageToDate / 100 * this.model.repetitionGoal;
@@ -119,15 +152,15 @@ export class GoalDetailsComponent {
             if (this.timePercentage) {
               this.timePercentageColor = this.timePercentage > this.goalPercentageToDate ? this.colorTable[2] : this.colorTable[1];
             }
-            this.daysToReachRepetitionGoal = (this.model.repetitionGoal - this.model.repetitionGoalDone) / this.avgRepetitionsDone;
+            this.daysToReachRepetitionGoal = (this.model.repetitionGoal - this.model.repetitionGoalDone) / this.avgGoalPercentage;
 
             this.DateToReachRepetitionGoal.setDate(this.DateToReachRepetitionGoal.getDate() + this.daysToReachRepetitionGoal);
 
-            this.repetitionPercentageColor = this.avgRepetitionsDone > this.avgRepetitionNeeded ? this.colorTable[2] : this.colorTable[1];
+            this.avgGoalPercentageColor = this.avgGoalPercentage > this.avgRepetitionNeeded ? this.colorTable[2] : this.colorTable[1];
             
           }
 
-          if (this.model.time && this.model.timeReached) {
+          if (this.model.timeGoal && this.model.timeGoalDone) {
 
           }
 
@@ -228,8 +261,8 @@ export class GoalDetails {
   endDate?: Date;
   repetitionGoal?: number;
   repetitionGoalDone?: number;
-  time?: number;
-  timeReached?: number;
+  timeGoal?: number;
+  timeGoalDone?: number;
 
 }
 export function getData1(): any[] {

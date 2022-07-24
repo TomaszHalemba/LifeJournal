@@ -25,7 +25,7 @@
       <td>{{this.model?.repetitionGoal}}</td>
       <td>{{this.model?.repetitionGoalDone}}</td>
       <td [ngStyle]="{'background-color': this.goalPercentageColor}">{{this?.goalPercentage | number}}%</td>
-      <td [ngStyle]="{'background-color': this.repetitionPercentageColor}" >{{this.avgRepetitionsDone | number}}</td>
+      <td [ngStyle]="{'background-color': this.avgGoalPercentageColor}">{{this.avgGoalPercentage | number}}</td>
       <td>{{this.avgRepetitionNeeded | number}}</td>
       <td rowspan="2">{{this?.goalPercentageToDate | number}}%</td>
 
@@ -35,10 +35,10 @@
     </tr>
     <tr>
       <td>Time</td>
-      <td>{{this.getTimeSpanFromLong(this.model?.time)}}</td>
-      <td>{{this.getTimeSpanFromLong(this.model?.timeReached)}}</td>
+      <td>{{this.getTimeSpanFromLong(this.model?.timeGoal)}}</td>
+      <td>{{this.getTimeSpanFromLong(this.model?.timeGoalDone)}}</td>
       <td [ngStyle]="{'background-color': this.timePercentageColor}">{{this?.timePercentage | number}}%</td>
-      <td [ngStyle]="{'background-color': this.avgTimeColor}">{{this.getTimeSpanFromLong(this?.avgTime)}}</td>
+      <td [ngStyle]="{'background-color': this.avgTimePercentageColor}">{{this.getTimeSpanFromLong(this?.avgTimePercentage)}}</td>
       <td>{{this.getTimeSpanFromLong(this?.avgTimeNeeded)}}</td>
       <td>{{this.getTimeSpanFromLong(this?.timeGoalToDate)}}</td>
       <td>{{this.daysToReachTimeGoal | number : '1.0-0'}} ({{this.DateToReachTimeGoal | date:'dd-MM-yyyy'}})</td>
