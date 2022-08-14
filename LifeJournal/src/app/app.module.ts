@@ -53,7 +53,8 @@ const routes: Routes = [
     AgChartsAngularModule
   ],
   exports: [ ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

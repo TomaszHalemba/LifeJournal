@@ -3,6 +3,7 @@ import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { AgChartOptions } from 'ag-charts-community';
+import { getDateWithoutTimezone } from '../Utils/TimeDateUtils';
 
 @Component({
   selector: 'app-goal-entry',
@@ -43,7 +44,7 @@ export class GoalEntryComponent  {
   addData() {
     var tmp = new GoalEntry();
     tmp.description = this.Description;
-    tmp.entryDate = this.EntryDate.value;
+    tmp.entryDate = getDateWithoutTimezone(this.EntryDate.value);
     tmp.repetitionGoal = this.RepetitionGoal;
     tmp.time = this.Time;
     tmp.id = this.goalId;
@@ -54,7 +55,19 @@ export class GoalEntryComponent  {
 
 }
 
+// public IEnumerable < GoalEntryPostDTO > Goals { get; set; }
+//        public IEnumerable < WeekDayStats > WeekDaysStats { get; set; }
 
+//public class WeekDayStats {
+//  public DayOfWeek DayOfWeek { get; set; }
+//            public long TimeSum { get; set; } 
+
+//        }
+
+export class GoalEntryGetDTO {
+  goals!: GoalEntry[];
+  weekDaysStats?: WeekDayStats[];
+}
 
 
 export class GoalEntry {
@@ -64,6 +77,14 @@ export class GoalEntry {
   repetitionGoal?: number;
   time?: number;
 }
+
+export class WeekDayStats {
+  dayOfWeek!: number;
+  timeSum?: number;
+  entries?: number;
+  avgTime?: number;
+}
+
 
 export class GoalEntryRequest {
   GoalId?: number;

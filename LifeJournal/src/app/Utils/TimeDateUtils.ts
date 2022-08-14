@@ -27,6 +27,17 @@ export function getTimeFromLong(time?: number): number {
   return returnString;
 }
 
+export function getDateWithoutTimezone(date: Date): Date {
+
+  var userTimezoneOffset = date.getTimezoneOffset() * 60000;
+  return new Date(date.getTime() - userTimezoneOffset);
+}
+
+
+export function getWeekDayName(day: number) :string{
+  const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  return weekdays[day];
+}
 
 export function calculateDateDiffDays(date1: Date, date2: Date) {
   return Math.abs(Math.floor((Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) - Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate())) / (1000 * 60 * 60 * 24))) + 1;

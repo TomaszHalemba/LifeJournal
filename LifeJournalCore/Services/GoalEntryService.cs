@@ -3,6 +3,7 @@ using LifeJournalCore.DTO;
 using LifeJournalCore.Model;
 using Microsoft.AspNetCore.Mvc;
 using NHibernate;
+using static LifeJournalCore.DTO.GoalEntryGetDTO;
 
 namespace LifeJournalCore.Controllers
 {
@@ -20,22 +21,32 @@ namespace LifeJournalCore.Controllers
         }
 
         [HttpGet(Name = "GoalEntryService")]
-        public IEnumerable<GoalEntryPostDTO> Get([FromQuery] GoalEntryGetRequestDTO goalEntryGetRequestDTO)
+        public GoalEntryGetDTO Get([FromQuery] GoalEntryGetRequestDTO goalEntryGetRequestDTO)
         {
-            var list = new List<GoalEntryPostDTO>();
+            var response = new GoalEntryGetDTO();
+            var goalEntries = new List<GoalEntryPostDTO>();
             NHibernate.ISession session = NHibernateHelper.GetCurrentSession();
             try
             {
                 using (ITransaction tx = session.BeginTransaction())
                 {
-                    list = session.Query<GoalEntry>()
+                    goalEntries = session.Query<GoalEntry>()
                         .Where(x => x.GoalPlan.Id == goalEntryGetRequestDTO.GoalId)
                         .OrderByDescending(x => x.DateForEntry)
                         .Select(x => new GoalEntryPostDTO(x)).ToList();
 
                     if (goalEntryGetRequestDTO.AmmountToTake != 0)
                     {
-                        list = list.Take(goalEntryGetRequestDTO.AmmountToTake).ToList();
+                        goalEntries = goalEntries.Take(goalEntryGetRequestDTO.AmmountToTake).ToList();
+                        response.WeekDaysStats = goalEntries.GroupBy(x => x.EntryDate.DayOfWeek).Select(x => new WeekDayStats()
+                        {
+                            DayOfWeek = x.Key,
+                            TimeSum = x.Sum(x => x.Time),
+                            Entries = x.Count(),
+
+                        }).OrderBy(x => x.DayOfWeek);
+                        response.Goals = goalEntries; 
+                        
                     }
 
                 }
@@ -44,7 +55,7 @@ namespace LifeJournalCore.Controllers
             {
                 NHibernateHelper.CloseSession();
             }
-            return list;
+            return response;
         }
 
         [HttpPost(Name = "GoalEntryService")]
