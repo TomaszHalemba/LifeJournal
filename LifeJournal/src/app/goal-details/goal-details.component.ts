@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AgChartOptions } from 'ag-charts-community';
-import { GoalEntry, GoalEntryGetDTO } from '../goal-entry/goal-entry.component';
 import { calculateDateDiffDays, getTimeFromLong, getTimeSpanFromLong, getWeekDayName } from '../Utils/TimeDateUtils';
 
 import * as agCharts from 'ag-charts-community';
+import { GoalDetails, GoalEntry, GoalEntryGetDTO } from '../dto/GoalsDTO';
 
 @Component({
   selector: 'app-goal-details',
@@ -16,6 +16,7 @@ import * as agCharts from 'ag-charts-community';
 export class GoalDetailsComponent {
 
   @Input() goalId?: number;
+  @Output() editEntryEmiter = new EventEmitter<GoalEntry>();
   public http: HttpClient;
   public model?: GoalDetails;
   public data: AgChartOptions;
@@ -72,11 +73,16 @@ export class GoalDetailsComponent {
     this.DateToReachTimeGoal = new Date();
 
 
+
     this.data = this.createOptions('test', initLineGraph());
     this.groupedData = this.createBarChart('test', initGraphData());
 
 
   }
+
+  getEditEntry(entry: GoalEntry) {
+    this.editEntryEmiter.emit(entry);
+    };
 
 
   getData() {
@@ -271,20 +277,8 @@ export class GoalDetailsComponent {
     return chartOptions;
   }
   
-
-
 }
-export class GoalDetails {
-  name?: string;
-  description?: string;
-  startDate?: Date;
-  endDate?: Date;
-  repetitionGoal?: number;
-  repetitionGoalDone?: number;
-  timeGoal?: number;
-  timeGoalDone?: number;
 
-}
 export function initLineGraph(): any[] {
   return [
     { date: new Date(2019, 0, 7), petrol: 120.27, diesel: 130.33 },

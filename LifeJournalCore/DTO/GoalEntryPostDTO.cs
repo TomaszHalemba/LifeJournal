@@ -13,6 +13,7 @@ namespace LifeJournalCore.DTO
             this.Time = (long)(entry.TimeOfEntry.HasValue ? entry.TimeOfEntry.Value.TotalSeconds : 0);
             this.RepetitionGoal = entry.NumberOfRepetition;
         }
+        public virtual int GoalId { get; set; }
         public virtual int Id { get; set; }
         public virtual string Description { get; set; }
         public virtual DateTime EntryDate { get; set; }

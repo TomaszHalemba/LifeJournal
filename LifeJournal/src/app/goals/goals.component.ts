@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { GoalEntry, GoalList, GoalSet } from '../dto/GoalsDTO';
+import { GoalEntryComponent } from '../goal-entry/goal-entry.component';
 
 @Component({
   selector: 'app-goals',
@@ -9,6 +11,8 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class GoalsComponent {
 
+  @ViewChild(GoalEntryComponent) mySon?: GoalEntryComponent;
+  public editEntry?: GoalEntry;
   public tmpnumber: any;
   public http: HttpClient;
   public Name?: string;
@@ -35,6 +39,13 @@ export class GoalsComponent {
   }
 
 
+  getEditEntryData(entry: GoalEntry) {
+    this.editEntry = entry;
+    if (this.mySon) {
+      this.mySon.setData(entry);
+    }
+  }
+
   addData() {
     var tmp = new GoalSet();
     tmp.Name = this.Name;
@@ -60,22 +71,3 @@ export class GoalsComponent {
     }, error => console.error(error));
   }
 }
-
-export class GoalSet {
-  Id?: number;
-  Name?: string;
-  Description?: string;
-  StartDate?: Date;
-  EndDate?: Date;
-  NumberOfEntries?: number;
-  RepetitionGoal?: number;
-  Time?: number;
-
-}
-
-
-export class GoalList {
-  id!: number;
-  name?: string;
-}
-

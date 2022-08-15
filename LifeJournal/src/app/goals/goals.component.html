@@ -48,9 +48,9 @@
 
   </div>
 
-  <app-goal-entry [goalId]="this.goalId"></app-goal-entry>
+  <app-goal-entry [goalId]="this.goalId" ></app-goal-entry>
   <hr />
-  <app-goal-details [goalId]="this.goalId"></app-goal-details>
+  <app-goal-details [goalId]="this.goalId" (editEntryEmiter) =getEditEntryData($event)></app-goal-details>
 
 
 

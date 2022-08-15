@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Input } from '@angular/core';
+import { Input, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { AgChartOptions } from 'ag-charts-community';
+import { GoalEntry } from '../dto/GoalsDTO';
+import { TimeSpanPickerComponent } from '../Utils/time-span-picker/time-span-picker.component';
 import { getDateWithoutTimezone } from '../Utils/TimeDateUtils';
 
 @Component({
@@ -11,7 +13,9 @@ import { getDateWithoutTimezone } from '../Utils/TimeDateUtils';
   styleUrls: ['./goal-entry.component.css']
 })
 export class GoalEntryComponent  {
+  @ViewChild(TimeSpanPickerComponent) timePicker?: TimeSpanPickerComponent;
   @Input() goalId?: number;
+  //@Input() goalEntry?: GoalEntry;
   public tmpnumber: any;
   public http: HttpClient;
   public Name?: string;
@@ -22,6 +26,7 @@ export class GoalEntryComponent  {
   public Minutes?: number;
   public Seconds?: number;
   public Time: number;
+  public entryId?: number;
 
 
   constructor(http: HttpClient) {
@@ -30,63 +35,57 @@ export class GoalEntryComponent  {
     this.EntryDate = new FormControl(new Date());
     this.RepetitionGoal = 1;
     this.Description = "";
-
-   
-
   }
+
+  setData(entry: GoalEntry) {
+    this.Description = entry.description;
+    if (entry.entryDate) {
+      this.EntryDate.setValue(new Date(entry.entryDate));
+    }
+    this.RepetitionGoal = entry.repetitionGoal;
+    if (this.timePicker) {
+      this.timePicker.setTime(entry.time);
+    }
+    this.entryId = entry.id;
+  }
+
 
   getTime(time: number) {
     this.Time = time;
   }
 
+  clearForm() {
+    this.entryId = undefined;
+    this.Description = "";
+    this.RepetitionGoal = 1;
+    this.EntryDate.setValue(new Date());
+    if (this.timePicker) {
+      this.timePicker.setTime(0);
+    }
 
+  }
 
-  addData() {
-    var tmp = new GoalEntry();
-    tmp.description = this.Description;
-    tmp.entryDate = getDateWithoutTimezone(this.EntryDate.value);
-    tmp.repetitionGoal = this.RepetitionGoal;
-    tmp.time = this.Time;
-    tmp.id = this.goalId;
-    this.http.post<boolean>('/GoalEntryService', tmp).subscribe(data => {
+  createGoalEntryFromForm(): GoalEntry {
+    var formEntry = new GoalEntry();
+    formEntry.description = this.Description;
+    formEntry.entryDate = getDateWithoutTimezone(this.EntryDate.value);
+    formEntry.repetitionGoal = this.RepetitionGoal;
+    formEntry.time = this.Time;
+    formEntry.goalId = this.goalId;
+    return formEntry;
+  }
+
+  editData() {
+    var formEntry = this.createGoalEntryFromForm();
+    formEntry.id = this.entryId;
+    this.http.post<boolean>('/GoalEntryService', formEntry).subscribe(data => {
     })
   }
 
+  addData() {
+    var formEntry = this.createGoalEntryFromForm();
+    this.http.post<boolean>('/GoalEntryService', formEntry).subscribe(data => {
+    })
+  }
 
-}
-
-// public IEnumerable < GoalEntryPostDTO > Goals { get; set; }
-//        public IEnumerable < WeekDayStats > WeekDaysStats { get; set; }
-
-//public class WeekDayStats {
-//  public DayOfWeek DayOfWeek { get; set; }
-//            public long TimeSum { get; set; } 
-
-//        }
-
-export class GoalEntryGetDTO {
-  goals!: GoalEntry[];
-  weekDaysStats?: WeekDayStats[];
-}
-
-
-export class GoalEntry {
-  id?: number;
-  description?: string | undefined;
-  entryDate?: Date;
-  repetitionGoal?: number;
-  time?: number;
-}
-
-export class WeekDayStats {
-  dayOfWeek!: number;
-  timeSum?: number;
-  entries?: number;
-  avgTime?: number;
-}
-
-
-export class GoalEntryRequest {
-  GoalId?: number;
-  AmmountToTake?: number;
 }

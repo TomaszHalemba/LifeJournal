@@ -67,8 +67,8 @@ namespace LifeJournalCore.Controllers
             {
                 using (ITransaction tx = session.BeginTransaction())
                 {
-                    goalEntry.GoalPlan = session.Get<Goal>(goalPostDTO.Id);
-                    session.Save(goalEntry);
+                    goalEntry.GoalPlan = session.Get<Goal>(goalPostDTO.GoalId);
+                    session.SaveOrUpdate(goalEntry);
                     tx.Commit();
                 }
                 return true;

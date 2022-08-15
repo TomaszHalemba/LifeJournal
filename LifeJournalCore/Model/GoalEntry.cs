@@ -12,6 +12,7 @@ namespace LifeJournalCore.Model
             DateForEntry = goalPostDTO.EntryDate;
             TimeOfEntry = TimeSpan.FromSeconds(goalPostDTO.Time);
             NumberOfRepetition = goalPostDTO.RepetitionGoal;
+            Id = goalPostDTO.Id;
         }
 
         public virtual int Id { get; set; }

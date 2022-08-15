@@ -51,6 +51,7 @@
       <th>Time of entry</th>
       <th>Number of<br /> repetitions</th>
       <th>Descriptions</th>
+      <th></th>
     </tr>
     <tr *ngFor="let column of GoalEntries">
       <td>
@@ -64,6 +65,9 @@
       </td>
       <td>
         {{column.description}}
+      </td>
+      <td>
+        <button class="btn btn-default" (click)="getEditEntry(column)">Edit</button>
       </td>
     </tr>
   </table>

@@ -23,4 +23,25 @@ export class TimeSpanPickerComponent  {
     this.Time.emit(time);
   }
 
+
+  setTime(time?: number) {
+    if (time) {
+      var seconds = time % 60;
+      var tmp = (time - seconds) / 60;
+      var minutes = tmp % 60;
+      var hours = (tmp - minutes) / 60;
+
+      this.Seconds = seconds;
+      this.Minutes = minutes;
+      this.Hours = hours;
+    }
+    else {
+      this.Seconds = 0;
+      this.Minutes = 0;
+      this.Hours = 0;
+    }
+
+
+  }
+
 }
