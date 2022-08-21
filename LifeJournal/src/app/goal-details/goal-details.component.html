@@ -1,8 +1,26 @@
 
-<button type="button" class="btn btn-default" (click)="getData()">show data</button>
-<label for="getDaysLbl">Get data from: </label>
-<input type="number" class="number-picker" id="getDaysId"
-       [(ngModel)]="this.PastDays" name="PastDays" style="width: 60px;">
+<div>
+  <label for="getDaysLbl">Get data from: </label>
+  <br />
+  <label for="endDate">Start date</label>
+  <mat-form-field appearance="fill">
+    <mat-label>Entry date</mat-label>
+    <input matInput [matDatepicker]="picker" [formControl]="this.startDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <label for="endDate">End date</label>
+  <mat-form-field appearance="fill">
+    <mat-label>Entry date</mat-label>
+    <input matInput [matDatepicker]="picker" [formControl]="this.endDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <br />
+  <button type="button" class="btn btn-default" (click)="getData()">get data</button>
+</div>
+
 <label for="DaysLbl"> days</label>
 <div *ngIf="this.model">
   <div>

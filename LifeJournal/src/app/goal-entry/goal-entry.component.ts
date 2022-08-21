@@ -15,7 +15,6 @@ import { getDateWithoutTimezone } from '../Utils/TimeDateUtils';
 export class GoalEntryComponent  {
   @ViewChild(TimeSpanPickerComponent) timePicker?: TimeSpanPickerComponent;
   @Input() goalId?: number;
-  //@Input() goalEntry?: GoalEntry;
   public tmpnumber: any;
   public http: HttpClient;
   public Name?: string;

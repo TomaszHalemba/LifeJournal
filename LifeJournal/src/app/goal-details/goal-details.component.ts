@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AgChartOptions } from 'ag-charts-community';
-import { calculateDateDiffDays, getTimeFromLong, getTimeSpanFromLong, getWeekDayName } from '../Utils/TimeDateUtils';
+import { calculateDateDiffDays, getDateWithoutTimezone, getTimeFromLong, getTimeSpanFromLong, getWeekDayName } from '../Utils/TimeDateUtils';
 
 import * as agCharts from 'ag-charts-community';
 import { GoalDetails, GoalEntry, GoalEntryGetDTO } from '../dto/GoalsDTO';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-goal-details',
@@ -21,6 +22,9 @@ export class GoalDetailsComponent {
   public model?: GoalDetails;
   public data: AgChartOptions;
   public groupedData: AgChartOptions;
+
+  public startDate: FormControl;
+  public endDate: FormControl;
 
 
 //    enum colorOfCell {
@@ -50,7 +54,6 @@ export class GoalDetailsComponent {
   public daySpan?: number;
   public goalPercentageToDate?: number;
   public color?: string;
-  public PastDays?: number;
   public GoalEntries?: GoalEntry[];
   public timeGoalToDate?: number;
   public repetitionGoalToDate?: number;
@@ -68,7 +71,8 @@ export class GoalDetailsComponent {
     this.avgGoalPercentageColor = this.colorTable[0];
     this.http = http;
     this.getData();
-    this.PastDays = 30;
+    this.startDate = new FormControl(new Date(new Date().setDate((new Date()).getDate() - 30)));
+    this.endDate = new FormControl(new Date());
     this.DateToReachRepetitionGoal = new Date();
     this.DateToReachTimeGoal = new Date();
 
@@ -141,7 +145,7 @@ export class GoalDetailsComponent {
             this.DateToReachRepetitionGoal.setDate(this.DateToReachRepetitionGoal.getDate() + this.daysToReachRepetitionGoal);
 
             this.avgGoalPercentageColor = this.avgGoalPercentage > this.avgRepetitionNeeded ? this.colorTable[2] : this.colorTable[1];
-            
+
           }
 
           if (this.model.timeGoal && this.model.timeGoalDone) {
@@ -152,7 +156,16 @@ export class GoalDetailsComponent {
 
       }, error => console.error(error));
 
-      this.http.get<GoalEntryGetDTO>('/GoalEntryService', { params: { GoalId: this.goalId!, AmmountToTake: this.PastDays ? this.PastDays : 30 } }).subscribe(data => {
+      this.http.get<GoalEntryGetDTO>('/GoalEntryService', {
+        params:
+        {
+          GoalId: this.goalId,
+          StartDate: this.startDate.value ? this.startDate.value.toISOString() : "",
+          EndDate: this.endDate.value ? this.endDate.value.toISOString() : "", 
+        }
+      }
+      )
+        .subscribe(data => {
         this.GoalEntries = data.goals;
 
         let newData = data.goals.map((x) => {

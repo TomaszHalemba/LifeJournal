@@ -1,8 +1,10 @@
+using FluentNHibernate.Conventions;
 using LifeJournalCore.Controllers.Database;
 using LifeJournalCore.DTO;
 using LifeJournalCore.Model;
 using Microsoft.AspNetCore.Mvc;
 using NHibernate;
+using System.Linq;
 using static LifeJournalCore.DTO.GoalEntryGetDTO;
 
 namespace LifeJournalCore.Controllers
@@ -28,16 +30,25 @@ namespace LifeJournalCore.Controllers
             NHibernate.ISession session = NHibernateHelper.GetCurrentSession();
             try
             {
+                
                 using (ITransaction tx = session.BeginTransaction())
                 {
-                    goalEntries = session.Query<GoalEntry>()
-                        .Where(x => x.GoalPlan.Id == goalEntryGetRequestDTO.GoalId)
-                        .OrderByDescending(x => x.DateForEntry)
+
+                    var query = session.Query<GoalEntry>()
+                        .Where(x => x.GoalPlan.Id == goalEntryGetRequestDTO.GoalId);
+
+                    if (goalEntryGetRequestDTO.StartDateDate != DateTime.MinValue)
+                        query = query.Where(x => x.DateForEntry > goalEntryGetRequestDTO.StartDateDate.Date);
+                    if (goalEntryGetRequestDTO.EndDateDate != DateTime.MaxValue)
+                        query = query.Where(x => x.DateForEntry <= goalEntryGetRequestDTO.EndDateDate.Date);
+                        
+
+                    goalEntries = query.OrderByDescending(x => x.DateForEntry)
                         .Select(x => new GoalEntryPostDTO(x)).ToList();
 
-                    if (goalEntryGetRequestDTO.AmmountToTake != 0)
+                    if (goalEntries.IsNotEmpty())
                     {
-                        goalEntries = goalEntries.Take(goalEntryGetRequestDTO.AmmountToTake).ToList();
+                        goalEntries = goalEntries.ToList();
                         response.WeekDaysStats = goalEntries.GroupBy(x => x.EntryDate.DayOfWeek).Select(x => new WeekDayStats()
                         {
                             DayOfWeek = x.Key,
