@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AgChartOptions } from 'ag-charts-community';
-import { calculateDateDiffDays, getDateWithoutTimezone, getTimeFromLong, getTimeSpanFromLong, getWeekDayName } from '../Utils/TimeDateUtils';
+import { addDays, calculateDateDiffDays, getDateWithoutTimezone, getTimeFromLong, getTimeSpanFromLong, getWeekDayName } from '../Utils/TimeDateUtils';
 
 import * as agCharts from 'ag-charts-community';
 import { GoalDetails, GoalEntry, GoalEntryGetDTO } from '../dto/GoalsDTO';
@@ -103,7 +103,7 @@ export class GoalDetailsComponent {
           this.timePercentage = (this.model.timeGoalDone / this.model.timeGoal * 100);
           if (this.avgTimePercentage) {
             this.daysToReachTimeGoal = (this.model.timeGoal - this.model.timeGoalDone) / this.avgTimePercentage;
-            this.DateToReachTimeGoal.setDate(this.DateToReachTimeGoal.getDate() + this.daysToReachTimeGoal);
+            this.DateToReachTimeGoal = addDays(new Date(), this.daysToReachTimeGoal);
           }
         }
 
@@ -142,7 +142,8 @@ export class GoalDetailsComponent {
             }
             this.daysToReachRepetitionGoal = (this.model.repetitionGoal - this.model.repetitionGoalDone) / this.avgGoalPercentage;
 
-            this.DateToReachRepetitionGoal.setDate(this.DateToReachRepetitionGoal.getDate() + this.daysToReachRepetitionGoal);
+
+            this.DateToReachRepetitionGoal = addDays(new Date(), this.daysToReachRepetitionGoal);
 
             this.avgGoalPercentageColor = this.avgGoalPercentage > this.avgRepetitionNeeded ? this.colorTable[2] : this.colorTable[1];
 

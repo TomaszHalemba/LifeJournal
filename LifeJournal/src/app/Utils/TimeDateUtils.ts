@@ -27,6 +27,12 @@ export function getTimeFromLong(time?: number): number {
   return returnString;
 }
 
+export function addDays(date: Date, daysToAdd: number): Date {
+  var returnDate = date;
+  returnDate.setDate(returnDate.getDate() + daysToAdd);
+  return returnDate;
+}
+
 export function getDateWithoutTimezone(date: Date): Date {
 
   var userTimezoneOffset = date.getTimezoneOffset() * 60000;
