@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AgChartOptions } from 'ag-charts-community';
-import { addDays, calculateDateDiffDays, getDateWithoutTimezone, getTimeFromLong, getTimeSpanFromLong, getWeekDayName } from '../Utils/TimeDateUtils';
+import { addDays, calculateDateDiffDays, getDateWithoutTimezone, getMonthName, getTimeFromLong, getTimeSpanFromLong, getWeekDayName } from '../Utils/TimeDateUtils';
 
 import * as agCharts from 'ag-charts-community';
-import { GoalDetails, GoalEntry, GoalEntryGetDTO } from '../dto/GoalsDTO';
+import { GoalDetails, GoalEntry, GoalEntryGetDTO, MonthStats, WeekDayStats } from '../dto/GoalsDTO';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -22,6 +22,7 @@ export class GoalDetailsComponent {
   public model?: GoalDetails;
   public data: AgChartOptions;
   public groupedData: AgChartOptions;
+  public groupedDataYear: AgChartOptions;
 
   public startDate: FormControl;
   public endDate: FormControl;
@@ -55,6 +56,8 @@ export class GoalDetailsComponent {
   public goalPercentageToDate?: number;
   public color?: string;
   public GoalEntries?: GoalEntry[];
+  public weekDayStats?: WeekDayStats[];
+  public monthDayStats?: MonthStats[];
   public timeGoalToDate?: number;
   public repetitionGoalToDate?: number;
 
@@ -80,6 +83,7 @@ export class GoalDetailsComponent {
 
     this.data = this.createOptions('test', initLineGraph());
     this.groupedData = this.createBarChart('test', initGraphData());
+    this.groupedDataYear = this.createBarChart('test', initGraphData());
 
 
   }
@@ -102,7 +106,7 @@ export class GoalDetailsComponent {
         if (this.model.timeGoalDone && this.model.timeGoal) {
           this.timePercentage = (this.model.timeGoalDone / this.model.timeGoal * 100);
           if (this.avgTimePercentage) {
-            this.daysToReachTimeGoal = (this.model.timeGoal - this.model.timeGoalDone) / this.avgTimePercentage;
+            this.daysToReachTimeGoal = Math.max((this.model.timeGoal - this.model.timeGoalDone) / this.avgTimePercentage, 0);
             this.DateToReachTimeGoal = addDays(new Date(), this.daysToReachTimeGoal);
           }
         }
@@ -140,7 +144,7 @@ export class GoalDetailsComponent {
             if (this.timePercentage) {
               this.timePercentageColor = this.timePercentage > this.goalPercentageToDate ? this.colorTable[2] : this.colorTable[1];
             }
-            this.daysToReachRepetitionGoal = (this.model.repetitionGoal - this.model.repetitionGoalDone) / this.avgGoalPercentage;
+            this.daysToReachRepetitionGoal = Math.max((this.model.repetitionGoal - this.model.repetitionGoalDone) / this.avgGoalPercentage, 0);
 
 
             this.DateToReachRepetitionGoal = addDays(new Date(), this.daysToReachRepetitionGoal);
@@ -167,7 +171,9 @@ export class GoalDetailsComponent {
       }
       )
         .subscribe(data => {
-        this.GoalEntries = data.goals;
+          this.GoalEntries = data.goals;
+          this.weekDayStats = data.weekDaysStats;
+          this.monthDayStats = data.monthsStats;
 
         let newData = data.goals.map((x) => {
           return { date: new Date(x.entryDate!), trainingTime: getTimeFromLong(x.time) }
@@ -178,7 +184,14 @@ export class GoalDetailsComponent {
             return { dayOfWeek: getWeekDayName(x.dayOfWeek), trainingTime: getTimeFromLong(x.timeSum) }
           });
 
-          this.groupedData = this.createBarChart('training time', newData1,'per weekday');
+          this.groupedData = this.createBarChart('training time', newData1,'per weekday','weekday');
+        }
+          if (data.monthsStats) {
+            let newData2 = data.monthsStats.map((x) => {
+            return { dayOfWeek: getMonthName(x.month-1), trainingTime: getTimeFromLong(x.timeSum) }
+          });
+
+          this.groupedDataYear = this.createBarChart('training time', newData2,'per month','month');
         }
       });
     }
@@ -192,9 +205,18 @@ export class GoalDetailsComponent {
     return getTimeFromLong(time);
   }
 
+  getWeekDayName(weekNumber: number): string {
+    return getWeekDayName(weekNumber);
+  }
 
-  createBarChart(title: string, chartData: any[], chartSubtitle?: string): AgChartOptions {
+  getMonthName(monthNumber: number): string {
+    return getMonthName(monthNumber);
+  }
+
+
+  createBarChart(title: string, chartData: any[], chartSubtitle?: string, xAxisName?: string): AgChartOptions {
     var chartOptions: AgChartOptions;
+    xAxisName = xAxisName ?? "X";
     chartOptions = {
       data: chartData,
       title: {
@@ -214,7 +236,7 @@ export class GoalDetailsComponent {
           position: 'bottom',
           type: 'category',
           title: {
-            text: 'weekday',
+            text: xAxisName,
           },
         },
         {

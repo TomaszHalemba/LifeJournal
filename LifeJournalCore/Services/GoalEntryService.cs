@@ -54,8 +54,19 @@ namespace LifeJournalCore.Controllers
                             DayOfWeek = x.Key,
                             TimeSum = x.Sum(x => x.Time),
                             Entries = x.Count(),
+                            maxTime = x.Max(x => x.Time),
+                            minTime = x.Min(x => x.Time)
 
                         }).OrderBy(x => x.DayOfWeek);
+                        response.MonthsStats = goalEntries.GroupBy(x => x.EntryDate.Month).Select(x => new MonthStats()
+                        {
+                            Month = x.Key,
+                            TimeSum = x.Sum(x => x.Time),
+                            Entries = x.Count(),
+                            maxTime = x.Max(x => x.Time),
+                            minTime = x.Min(x => x.Time)
+
+                        }).OrderBy(x => x.Month);
                         response.Goals = goalEntries; 
                         
                     }

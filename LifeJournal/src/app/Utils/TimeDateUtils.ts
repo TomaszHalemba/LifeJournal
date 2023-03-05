@@ -45,6 +45,11 @@ export function getWeekDayName(day: number) :string{
   return weekdays[day];
 }
 
+export function getMonthName(day: number): string {
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November","December"];
+  return months[day];
+}
+
 export function calculateDateDiffDays(date1: Date, date2: Date) {
   return Math.abs(Math.floor((Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) - Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate())) / (1000 * 60 * 60 * 24))) + 1;
 }

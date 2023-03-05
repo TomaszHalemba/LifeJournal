@@ -1,4 +1,3 @@
-
 <div>
   <label for="getDaysLbl">Get data from: </label>
   <br />
@@ -63,41 +62,100 @@
     </tr>
   </table>
   <br />
-  <table>
-    <tr>
-      <th>Date of entry</th>
-      <th>Time of entry</th>
-      <th>Number of<br /> repetitions</th>
-      <th>Descriptions</th>
-      <th></th>
-    </tr>
-    <tr *ngFor="let column of GoalEntries">
-      <td>
-        {{column.entryDate | date:'yyyy-MM-dd HH:mm'}}
-      </td>
-      <td>
-        {{this.getTimeSpanFromLong(column.time)}}
-      </td>
-      <td>
-        {{column.repetitionGoal}}
-      </td>
-      <td>
-        {{column.description}}
-      </td>
-      <td>
-        <button class="btn btn-default" (click)="getEditEntry(column)">Edit</button>
-      </td>
-    </tr>
-  </table>
 
   <div>
-    <ag-charts-angular [options]="data">
-    </ag-charts-angular>
+    <div style="width: 40%; float:left">
+
+
+      <table>
+        <tr>
+          <th>day of week</th>
+          <th>time sum</th>
+          <th>entries ammount</th>
+          <th>avg time</th>
+          <th>min time</th>
+          <th>max time</th>
+        </tr>
+        <tr *ngFor="let weekDay of this.weekDayStats">
+          <td>{{this.getWeekDayName(weekDay.dayOfWeek)}}</td>
+          <td>{{this.getTimeSpanFromLong(weekDay.timeSum)}}</td>
+          <td>{{weekDay.entries}}</td>
+          <td>{{this.getTimeSpanFromLong(weekDay.avgTime)}}</td>
+          <td>{{this.getTimeSpanFromLong(weekDay.minTime)}}</td>
+          <td>{{this.getTimeSpanFromLong(weekDay.maxTime)}}</td>
+        </tr>
+      </table>
+
+    </div>
+
+    <div style="width: 60%; float:right">
+      <table>
+        <tr>
+          <th>month</th>
+          <th>time sum</th>
+          <th>entries ammount</th>
+          <th>avg time</th>
+          <th>min time</th>
+          <th>max time</th>
+        </tr>
+        <tr *ngFor="let weekDay of this.monthDayStats">
+          <td>{{this.getMonthName(weekDay.month-1)}}</td>
+          <td>{{this.getTimeSpanFromLong(weekDay.timeSum)}}</td>
+          <td>{{weekDay.entries}}</td>
+          <td>{{this.getTimeSpanFromLong(weekDay.avgTime)}}</td>
+          <td>{{this.getTimeSpanFromLong(weekDay.minTime)}}</td>
+          <td>{{this.getTimeSpanFromLong(weekDay.maxTime)}}</td>
+        </tr>
+      </table>
+
+
+    </div>
+
   </div>
 
 
-  <div>
-    <ag-charts-angular [options]="groupedData">
-    </ag-charts-angular>
-  </div>
+          <br style="clear:both;"/>
+  <br/>
+          <table>
+            <tr>
+              <th>Date of entry</th>
+              <th>Time of entry</th>
+              <th>Number of<br /> repetitions</th>
+              <th>Descriptions</th>
+              <th></th>
+            </tr>
+            <tr *ngFor="let column of GoalEntries">
+              <td>
+                {{column.entryDate | date:'yyyy-MM-dd HH:mm'}}
+              </td>
+              <td>
+                {{this.getTimeSpanFromLong(column.time)}}
+              </td>
+              <td>
+                {{column.repetitionGoal}}
+              </td>
+              <td>
+                {{column.description}}
+              </td>
+              <td>
+                <button class="btn btn-default" (click)="getEditEntry(column)">Edit</button>
+              </td>
+            </tr>
+          </table>
+
+          <div>
+            <ag-charts-angular [options]="data">
+            </ag-charts-angular>
+          </div>
+
+
+          <div>
+            <ag-charts-angular [options]="groupedData">
+            </ag-charts-angular>
+          </div>
+
+          <div>
+            <ag-charts-angular [options]="groupedDataYear">
+            </ag-charts-angular>
+          </div>
 </div>

@@ -1,6 +1,7 @@
 export class GoalEntryGetDTO {
   goals!: GoalEntry[];
   weekDaysStats?: WeekDayStats[];
+  monthsStats?: MonthStats[];
 }
 
 
@@ -18,6 +19,17 @@ export class WeekDayStats {
   timeSum?: number;
   entries?: number;
   avgTime?: number;
+  minTime?: number;
+  maxTime?: number;
+}
+
+export class MonthStats {
+  month!: number;
+  timeSum?: number;
+  entries?: number;
+  avgTime?: number;
+  minTime?: number;
+  maxTime?: number;
 }
 
 export class GoalDetails {

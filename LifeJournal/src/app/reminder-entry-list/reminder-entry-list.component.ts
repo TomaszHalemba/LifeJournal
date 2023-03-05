@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { getDateWithoutTimezone } from '../Utils/TimeDateUtils';
 
 @Component({
   selector: 'app-reminder-entry-list',
@@ -33,7 +34,7 @@ export class ReminderEntryListComponent implements OnInit {
   addData() {
     var tmp = new reminderEntry();
     tmp.name = this.reminderName;
-    tmp.reminderDate = this.entryDate.value;
+    tmp.reminderDate = getDateWithoutTimezone(this.entryDate.value);
 
 
     this.http.post<boolean>('/ReminderEntryGetService', tmp).subscribe(result => {
